@@ -15,7 +15,7 @@ DRIVE_FOLDER_ID = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
 B64_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
 
 CAPTION = ("Don't forget to subscribe for more!\n\n"
-           "#motivation #clips #money #fyp #fypシ゚viralシ #viral #facebookreels")
+           "#EverythingFeed #clips #fyp #fypシ゚viralシ #viral #facebookreels")
 
 if not all([FACEBOOK_PAGE_ID, FACEBOOK_PAGE_ACCESS_TOKEN, DRIVE_FOLDER_ID, B64_SERVICE_ACCOUNT_JSON]):
     raise RuntimeError("Missing one of the required environment variables.")
@@ -81,7 +81,7 @@ def get_next_video():
 # --- POST VIDEO TO FACEBOOK ---
 def post_video_to_facebook(video_id, video_name):
     video_url = f"https://drive.google.com/uc?id={video_id}&export=download"
-    url = f"https://graph.facebook.com/v18.0/{FACEBOOK_PAGE_ID}/videos"
+    url = f"https://graph.facebook.com/v18.0/{FACEBOOK_PAGE_ID}/video_reels"
 
     data = {
         "access_token": FACEBOOK_PAGE_ACCESS_TOKEN,
