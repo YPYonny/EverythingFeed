@@ -16,7 +16,7 @@ B64_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
 
 CAPTION = (
     "Don't forget to subscribe for more!\n\n"
-    "#motivation #clips #money #fyp #fypシ゚viralシ #viral #facebookreels"
+    "#motivation #clips #money #fyp #fypシ゚viralシ #viral #facebookvideo"
 )
 
 if not all([FACEBOOK_PAGE_ID, FACEBOOK_PAGE_ACCESS_TOKEN, DRIVE_FOLDER_ID, B64_SERVICE_ACCOUNT_JSON]):
@@ -80,45 +80,22 @@ def get_next_video():
 
     return next_video
 
-# --- POST REEL TO FACEBOOK ---
+# --- POST VIDEO TO FACEBOOK ---
 def post_video_to_facebook(video_id, video_name):
     video_url = f"https://drive.google.com/uc?id={video_id}&export=download"
-    start_url = f"https://graph.facebook.com/v18.0/{FACEBOOK_PAGE_ID}/video_reels"
+    url = f"https://graph.facebook.com/v18.0/{FACEBOOK_PAGE_ID}/videos"
 
-    # --- 1. Start upload session ---
-    start_params = {
-        "upload_phase": "start",
+    data = {
         "access_token": FACEBOOK_PAGE_ACCESS_TOKEN,
-    }
-    start_res = requests.post(start_url, data=start_params).json()
-    if "error" in start_res:
-        raise RuntimeError(f"Facebook API error (start): {start_res}")
-
-    video_id_fb = start_res["video_id"]
-    upload_url = start_res["upload_url"]
-
-    # --- 2. Upload video from Google Drive ---
-    drive_res = requests.get(video_url, stream=True)
-    if drive_res.status_code != 200:
-        raise RuntimeError(f"Failed to fetch video from Google Drive: {drive_res.text}")
-
-    upload_res = requests.post(upload_url, data=drive_res.raw)
-    if not upload_res.ok:
-        raise RuntimeError(f"Facebook API error (upload): {upload_res.text}")
-
-    # --- 3. Finish upload & publish ---
-    finish_params = {
-        "upload_phase": "finish",
-        "video_id": video_id_fb,
-        "video_state": "PUBLISHED",  # or "DRAFT"
+        "file_url": video_url,
         "description": CAPTION,
-        "access_token": FACEBOOK_PAGE_ACCESS_TOKEN,
+        "published": "true"
     }
-    finish_res = requests.post(start_url, data=finish_params).json()
-    if "error" in finish_res:
-        raise RuntimeError(f"Facebook API error (finish): {finish_res}")
 
-    print(f"[SUCCESS] Posted Reel: {video_name} (FB ID: {video_id_fb})")
+    response = requests.post(url, data=data)
+    if not response.ok:
+        raise RuntimeError(f"Facebook API error: {response.text}")
+    print(f"[SUCCESS] Posted Video: {video_name}")
 
 # --- MAIN ---
 def main():
