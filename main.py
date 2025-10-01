@@ -16,7 +16,7 @@ B64_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
 
 CAPTION = (
     "Don't forget to subscribe for more!\n\n"
-    "#motivation #clips #money #fyp #fypシ゚viralシ #viral #facebookvideo"
+    "#EverythingFeed #clips #fyp #fypシ゚viralシ #viral #facebookvideo"
 )
 
 if not all([FACEBOOK_PAGE_ID, FACEBOOK_PAGE_ACCESS_TOKEN, DRIVE_FOLDER_ID, B64_SERVICE_ACCOUNT_JSON]):
